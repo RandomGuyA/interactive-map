@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$" libraries="{county_map/node_modules}" />
+    <file url="file://$PROJECT_DIR$/vendors/jquery-color" libraries="{county_map/vendors/jquery-color/node_modules}" />
+  </component>
+</project>

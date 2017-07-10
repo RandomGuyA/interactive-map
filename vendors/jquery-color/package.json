@@ -1,0 +1,45 @@
+{
+  "name": "jquery-color",
+  "description": "A jQuery plugin that adds color animation support.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jquery"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/znetstar/jquery-color.git"
+  },
+  "dependencies": {
+    "jQuery": "latest"
+  },
+  "main": "./require.js",
+  "ender": "./require.js",
+  "_npmUser": {
+    "name": "znetstar",
+    "email": "admin@znetstar.net"
+  },
+  "_id": "jquery-color@1.0.0",
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "_engineSupported": true,
+  "_npmVersion": "1.1.9",
+  "_nodeVersion": "v0.6.12",
+  "_defaultsLoaded": true,
+  "dist": {
+    "shasum": "003aba988a6f2d21d963d1f2eeeb6cdbc80471f1",
+    "tarball": "https://registry.npmjs.org/jquery-color/-/jquery-color-1.0.0.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "znetstar",
+      "email": "admin@znetstar.net"
+    }
+  ],
+  "directories": {},
+  "_shasum": "003aba988a6f2d21d963d1f2eeeb6cdbc80471f1",
+  "_resolved": "https://registry.npmjs.org/jquery-color/-/jquery-color-1.0.0.tgz",
+  "_from": "jquery-color@latest"
+}
