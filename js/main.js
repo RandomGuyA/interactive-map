@@ -172,7 +172,8 @@
 
         var defaults = {
 
-            required: true
+            dropdown: true,
+            title: "Percentage of welsh speakers per county in Wales"
 
         };
 
@@ -184,6 +185,19 @@
         var plugin = this; //use plugin instead of "this"
         var id = ID;  //set unique ID for plugin instance
 
+        var files_loaded = 0;
+        var file_count = 4;
+
+        var year_data = [];
+        var county_data = [];
+        var county_to_year = [];
+
+        var map_data = [];
+        var data = [];
+
+        var current_year;
+        var $map;
+        var $interface;
         //--------------------------------------//
         //       CUSTOM SETTING SETUP
         //--------------------------------------//
@@ -210,7 +224,16 @@
 
             console.log("initialised plugin " + name + " -- " + id);
 
-            load_file('data/xml/new_counties_wales.svg');
+            $element.append(
+                $('<div>').attr('id', 'interface'),
+                $('<div>').attr('id', 'map')
+            );
+            $map = $('#map');
+
+            load_file('data/xml/welsh_counties.svg');
+            load_csv('data/csv/year_data.csv');
+            load_csv('data/csv/county.csv');
+            load_csv('data/csv/county_to_year.csv');
 
         };
 
@@ -241,48 +264,175 @@
          *  methodName(arg1, arg2, ... argn)
          */
 
-        var start_app = function () {
-
-            load_csv('data/csv/all_county_data.csv');
-
-            $element.find('path').each(function () {
-                //console.log($(this).attr('id'));
-                var alpha = 0.5;
-                var color = $.Color("rgb(130,0,0," + alpha + ")");
-
-                $(this).attr('style', 'fill:' + color);
-
-            });
-
+        var setup_map = function () {
+            console.log("here");
+            setup_data();
+            setup_interface();
+            set_year(map_data[0]);
+            render_map(current_year);
+            setup_key();
+            label_adjustment();
         };
 
-        var load_csv = function (url) {
-
-            $.ajax(url)
-                .done(function (response) {
-                    processData(response)
-
-                })
-                .fail(function (xhr) {
-                    alert('Error: ' + xhr.responseText);
-                });
+        var set_year = function (year) {
+            current_year = year;
         };
 
+        var get_year_by_id = function (id) {
 
-        var setup_map = function (map_data) {
+            var year;
 
             for (var a = 0; a < map_data.length; a++) {
-                set_county_data(map_data[a]);
+                if (id == map_data[a].id) {
+                    year = map_data[a];
+                }
             }
+            return year;
+        };
 
-            setup_key();
+        var render_map = function (year) {
+
+            console.log('render map: ' + year.year);
+            hide_layers();
+            $map.find('#layer' + year.layer_id).show();
+
+            $('path').click_county();
+
+            var counties = year.locations;
+            $('.path-label').hide();
+
+            for (var a = 0; a < counties.length; a++) {
+                setup_county(counties[a]);
+            }
+        };
+
+        var hide_layers = function () {
+            $map.find('#layer1').hide();
+            $map.find('#layer2').hide();
+        };
+
+        var add_dropdown = function () {
+
+            if (plugin.settings.dropdown) {
+                $map.append(dropdown());
+                $('#' + 'dropdown-' + id).dropdown_event_handler();
+            }
+        };
+
+        var dropdown = function () {
+            return $('<select>').attr('id', 'dropdown-' + id).addClass('dropdown').append(
+                $.map(map_data, function (value, index) {
+                    return $('<option>').attr('value', value.id).text(value.year)
+                })
+            );
+        };
+
+        var setup_interface = function () {
+            //setup_title();
+
+            add_dropdown();
+            add_path_labels();
+        };
+
+        var add_path_labels = function () {
+
+            $map.prepend($('<div>').attr('id', 'label-wrapper').append(
+                $('<ul>').attr('id', 'path-labels'))
+            );
+
+            for (var a = 0; a < county_data.length; a++) {
+                add_labels(county_data[a]);
+            }
+        };
+
+        var setup_title = function () {
+
+            var title = plugin.settings.title;
+
+            $map.prepend(
+                $('<h1>').addClass('title').text(title)
+            )
+        };
+
+        var setup_data = function () {
+
+            year_data = data[0];
+            county_data = data[1];
+            county_to_year = data[2];
+
+            for (var a = 0; a < year_data.length; a++) {
+
+                var year = Year(year_data[a]);
+
+                var locations = [];
+
+                for (var b = 0; b < county_to_year.length; b++) {
+
+                    var county = county_to_year[b];
+
+                    if (year.id == county[3]) {
+                        locations.push(County(county));
+                    }
+                }
+                year.locations = locations;
+                map_data.push(year);
+            }
+            //console.log(map_data);
+        };
+
+        var get_county_by_id_from_county_data = function (id) {
+
+            var county;
+
+            for (var a = 0; a < county_data.length; a++) {
+                var temp_county = county_data[a];
+                if (id == temp_county[0]) {
+                    county = temp_county;
+                    break;
+                }
+            }
+            return county;
+        };
+
+        var get_id_from_string = function(string){
+
+            var arr = string.split('-');
+            return parseInt(arr[arr.length-1]);
+
 
         };
 
-        var setup_key = function () {
-            $element.append($('<ul>').attr('id', 'key'));
-            repeat(render, 100);
 
+
+        var setup_key = function () {
+
+            $interface = $('#interface');
+
+            $('#interface').empty();
+            var counties = current_year.locations;
+            $('#interface').append(
+                $('<div>').addClass('interface-wrapper').append(
+                    $('<div>').addClass('interface-header').append(
+                        $('<h4>').text(current_year.year)
+                    ),
+                    $('<ul>').append(
+                        $.map(counties, function (value, index) {
+                            return $('<li>').addClass('side-label').attr('id', "side-label-"+value.id).text(value.welsh).append(
+                                $('<div>').addClass('left square').append(
+                                    $('<div>').addClass('circle').text(value.id)
+                                ),
+                                $('<div>').addClass('right square').append(
+                                    $('<div>').addClass('circle').text(Math.round(value.value))
+                                )
+                            )
+                        })
+                    )
+                )
+            );
+            $('.side-label').click_county_label();
+            /*
+             $map.append($('<ul>').attr('id', 'key'));
+             repeat(render, 100);*/
         };
 
         var repeat = function (fn, times) {
@@ -294,14 +444,100 @@
             $("#key").append(item);
         }
 
-        var set_county_data = function (county_data) {
+        var setup_county = function (county) {
 
-            var id = county_data[0];
-            var value = parseInt(county_data[5]);
-            var color = $.Color(percent_to_RGB(100 - parseInt(value)));
-            $('#path' + id).attr('style', 'fill:' + color);
+            var id = county.path_id;
+            var value = (parseInt(county.value) / 2 * 0.01) + 0.5;
+            var color = $.Color(135, 0, 0, value);
+            $('#path' + id).css({fill: color});
+            update_label_location(county);
+
         };
 
+        var add_labels = function (county) {
+
+            $('#path-labels').append(
+                $('<li>')
+                    .addClass('path-label')
+                    .attr({id: 'label' + county[0], title: county[2]})
+                    .text(county[3])
+            );
+        };
+
+        var update_label_location = function (county) {
+
+            var $label = $map.find('#' + 'label' + county.id);
+            if ($label.length > 0) {
+                $label.css(set_css_location(county));
+            }
+        };
+
+        var set_css_location = function (county) {
+
+            var $path = $('#path' + county.path_id);
+
+            var top_adjust = -20;
+
+            var label_dimensions = document.querySelector('#label' + county.id).getBoundingClientRect();
+            var dimensions = document.querySelector('#' + $path.attr('id')).getBoundingClientRect();
+
+            var location = $path.position();
+            var width = dimensions.width;
+            var height = dimensions.height;
+
+            var offset_top = county.top / 100 * height;
+            var offset_left = county.left / 100 * width;
+
+            var top = offset_top + location.top - (label_dimensions.height / 2) + top_adjust;
+            var left = offset_left + location.left - (label_dimensions.width / 2);
+
+            /*
+             if(county.id==1){
+             console.log("name " + county.welsh);
+             console.log("location.top: " + location.top);
+             console.log("location.left: " + location.left);
+             console.log("width: " + width);
+             console.log("height: " + height);
+             console.log("offset.top: " + offset_top);
+             console.log("offset.left: " + offset_left);
+             console.log("label_dimensions.height: " + label_dimensions.height);
+             console.log("label_dimensions.width: " + label_dimensions.width);
+
+             console.log("top " + top);
+             console.log("left " + left);
+             }*/
+
+            return {
+                top: top,
+                left: left
+            }
+        };
+
+
+        var get_county_by_id = function (id){
+
+            var county;
+            var counties = current_year.locations;
+            for (var a = 0; a < counties.length; a++) {
+                if (id == counties[a].id) {
+                    county = counties[a];
+                }
+            }
+            return county;
+
+        };
+
+        var get_label_id = function (path_id) {
+
+            var id;
+            var counties = current_year.locations;
+            for (var a = 0; a < counties.length; a++) {
+                if (path_id == "path" + counties[a].path_id) {
+                    id = counties[a].id;
+                }
+            }
+            return id;
+        };
 
         var percent_to_RGB = function (percent) {
             if (percent === 100) {
@@ -324,11 +560,10 @@
             return "rgb(" + r + "," + g + "," + b + ")";
         };
 
-
         var processData = function (allText) {
             var allTextLines = allText.split(/\r\n|\n/);
             var headers = allTextLines[0].split(',');
-            var lines = [];
+            var array = [];
 
             for (var i = 1; i < allTextLines.length; i++) {
                 var data = allTextLines[i].split(',');
@@ -338,27 +573,59 @@
                     for (var j = 0; j < headers.length; j++) {
                         tarr.push(data[j]);
                     }
-                    lines.push(tarr);
+                    array.push(tarr);
                 }
             }
-            console.log(lines);
+            files_loaded++;
+            return array;
+        };
 
-            setup_map(lines);
-
+        var load_csv = function (url) {
+            $.ajax(url)
+                .done(function (response) {
+                    data.push(processData(response));
+                    console.log("content loaded");
+                })
+                .fail(function (xhr) {
+                        alert('Error: ' + xhr.responseText);
+                    }
+                );
         };
 
         var load_file = function (url) {
 
             $.ajax(url)
                 .done(function (response) {
-                    $element.html($(response).find('svg'));
-                    start_app();
+                    $map.html($(response).find('svg'));
+                    console.log("content loaded");
+                    files_loaded++;
                 })
                 .fail(function (xhr) {
                     alert('Error: ' + xhr.responseText);
                 });
         };
 
+        var ajax_event_listener = setInterval(
+            function () {
+
+                if (files_loaded >= file_count) {
+                    console.log('all loaded');
+                    setup_map();
+                    clear_interval();
+                }
+            }, 100
+        );
+
+        var label_adjustment = function () {
+            var counties = current_year.locations;
+            for (var a = 0; a < counties.length; a++) {
+                update_label_location(counties[a]);
+            }
+        };
+
+        var clear_interval = function () {
+            clearInterval(ajax_event_listener);
+        };
 
         //--------------------------------------//
         //    CUSTOM BINDING EVENTS
@@ -370,11 +637,89 @@
          *    eg: $('.element).bind_event(args);
          */
 
-        $.fn.bind_event = function (args) {
+        $.fn.dropdown_event_handler = function (args) {
+
+            $(this).on('change', function () {
+                var id = parseInt($(this).find(':selected').attr('value'));
+                set_year(get_year_by_id(id));
+                render_map(current_year);
+                label_adjustment();
+                setup_key();
+            });
+        };
 
 
-            // code goes here
+        $(window).on('resize', function () {
+            label_adjustment();
+        });
 
+        $.fn.click_county = function () {
+
+            $(this).on('mouseover', function () {
+
+                var path_id = $(this).attr('id');
+                var label_id = get_label_id(path_id);
+                $('.side-label').removeClass('active');
+                $('#side-label-' + label_id).addClass('active');
+
+            });
+            $(this).on('mouseout', function () {
+
+                var path_id = $(this).attr('id');
+                var label_id = get_label_id(path_id);
+                $('.side-label').removeClass('active');
+
+            });
+        };
+
+        $.fn.click_county_label = function () {
+
+            $(this).on('mouseover', function () {
+
+                $('path').removeClass('active');
+                var label = $(this);
+
+                var id = get_id_from_string(label.attr('id'));
+                var county = get_county_by_id(id);
+
+                $('#path'+county.path_id).addClass('active');
+
+
+
+            });
+            $(this).on('mouseout', function () {
+
+                $('path').removeClass('active');
+
+            });
+        };
+
+
+        //-----------------------------------------
+        //				OBJECTS
+        //-----------------------------------------
+
+        var Year = function (year) {
+            return {
+                id: year[0],
+                year: year[1],
+                layer_id: year[2]
+            }
+        };
+
+        var County = function (loc) {
+
+            var county = get_county_by_id_from_county_data(loc[2]);
+
+            return {
+                id: county[0],
+                path_id: county[1],
+                english: county[2],
+                welsh: county[3],
+                value: loc[1],
+                top: parseInt(county[4]),
+                left: parseInt(county[5])
+            }
         };
 
 

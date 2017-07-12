@@ -4,23 +4,161 @@
            INTERACTIVE MAP.LESS
 -----------------------------------------*/
 
+@line-height: 20px;
+@radius: @line-height / 2;
+@diff: 2px;
+@round-margin: @diff / 2;
 
-#map {
-    svg {
-        width:50%;
-        height:auto;
-    }
-    
-    #key {
-        position:absolute;
-        left:20px;
-        top:20px;
-        width:20px;
-        height:200px;
-        
-        li {
-            height:2px;
+#interactive-map {
+
+    overflow: hidden;
+    width: 60%;
+
+    #interface {
+        padding-right:20px;
+        width: 35%;
+        float: left;
+
+
+        .interface-wrapper {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        .interface-header {
+            background-color: rgba(135, 0, 0, 0.65);
+            color: #fff;
+            -moz-border-radius: @radius;
+            -webkit-border-radius: @radius;
+            border-radius: @radius;
+            height:100px;
+            width:100%;
+            margin-bottom:5px;
+
+            h4 {
+                line-height:100px;
+                font-size:32px;
+                text-align: center;
+            }
+        }
+
+        ul {
+            & > li {
+
+
+                position: relative;
+                background-color: rgba(135, 0, 0, 0.65);
+                color: #fff;
+                text-align: center;
+                margin-bottom: @round-margin;
+                height: @line-height + @diff;
+                line-height: @line-height + @diff;
+                -moz-border-radius: @radius;
+                -webkit-border-radius: @radius;
+                border-radius: @radius;
+                cursor:pointer;
+
+                &.active, &:hover {
+                    background-color: rgba(135, 0, 0, 1);
+                }
+
+                .square {
+                    //background-color: #fff;
+                    width: @line-height;
+                    height: @line-height;
+                    position: absolute;
+                    top: @round-margin;
+                }
+                .circle {
+                    width: @line-height;
+                    height: @line-height;
+                    background: #fff;
+                    -moz-border-radius: @radius;
+                    -webkit-border-radius: @radius;
+                    border-radius: @radius;
+                    color:rgba(135, 0, 0, 0.65);
+                    font-size:12px;
+                    font-weight:bold;
+
+                }
+                .left {
+                    left: @round-margin;
+                }
+                .right {
+                    right: @round-margin;
+                }
+            }
         }
     }
-    
+
+    #map {
+        //position: relative;
+        width: 65%;
+        float: left;
+
+        svg {
+            width: 100%;
+            height: auto;
+        }
+        .dropdown {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+        .title {
+
+            width: 100%;
+            height: 50px;
+            margin-bottom: 100px;
+            text-align: center;
+        }
+        path {
+
+            cursor:pointer;
+
+            &.active {
+                opacity:0.4;
+            }
+
+
+            &:hover {
+              opacity:0.4;
+            }
+        }
+        #label-wrapper {
+
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            & > ul {
+                margin: 0;
+                position: relative;
+
+                & > li {
+
+                    position: absolute;
+                    color: #000;
+                    text-align: center;
+                    font-weight: bold;
+
+                    @media @XL, @LG {
+                        font-size: 14px;
+                    }
+                    @media @MD {
+                        font-size: 12px;
+                    }
+                    @media @SM {
+                        font-size: 12px;
+                    }
+                    @media @XS {
+                        font-size: 12px;
+                    }
+                    @media @XXS {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
 }

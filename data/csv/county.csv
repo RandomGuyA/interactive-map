@@ -1,0 +1,36 @@
+id,path_id,english,welsh,top,left
+1,4252,Angelsey,Sir Fôn,60,50
+2,4216,Breconshire,Brycheiniog,75,53
+3,4286,Caernarfonshire,Sir Gaernarfon,50,70
+4,4230,Ceredigion,Sir Aberteifi,50,75
+5,4212,Carmarthenshire,Sir Gâr,55,55
+6,4258,Denbighshire,Sir Ddinbych,45,35
+7,4246,Flintshire,Sir y Fflint,50,55
+8,46,Glamorgan,Sir Forgannwg,55,65
+9,4248,Merionethshire,Sir Feirionnydd,50,35
+10,34,Monmouthshire,Sir Fynwy,60,50
+11,30,Montgomeryshire,Sir Drefaldwyn,55,50
+12,4210,Pembrokeshire,Sir Benfro,50,47
+13,4228,Radnorshire,Sir Faesyfed,50,60
+14,4230-0,Ynys Môn,Ynys Môn,70,48
+15,4276-8,Gwynedd,Gwynedd,65,70
+16,14,Conwy,Conwy,60,50
+17,4190,Sir Ddinbych,Sir Ddinbych,70,53
+18,4192,Sir y Ffflint,Sir y Ffflint,75,65
+19,4206,Wrexham,Wrecsam,55,65
+20,18,Powys,Powys,50,50
+21,4286-7,Ceredigion,Ceredigion,60,70
+22,4282,Pembrokeshire,Sir Benfro,60,50
+23,4284-1,Sir Gaerfyrddin,Sir Gaerfyrddin,55,55
+24,4306,Swansea,Abertawe,85,50
+25,4322,Castell-nedd Port Talbot,Castell-nedd,50,50
+26,4532,Pen-y-bont ar Ogwr,Pen-y-bont,70,50
+27,4518,Glamorgan,Bro Morgannwg,85,50
+28,4326,Rhondda Cynon Taf,Rhondda Cynon Taf,70,50
+29,4328,Merthyr Tydfil,Merthyr Tudful,40,40
+30,4318,Caerphilly,Caerffili,90,90
+31,4324,Blaenau Gwent,Blaenau Gwent,20,100
+32,4320,Tor-faen,Torfaen,80,90
+33,26,Sir Fynwy,Sir Fynwy,60,60
+34,4530,Newport,Casnewydd,90,90
+35,4520,Cardiff,Caerdydd,100,100
