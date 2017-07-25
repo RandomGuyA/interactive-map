@@ -15,12 +15,26 @@
 
 <body>
 
-<div id="interactive-map">
+<div class="col-xs-6">
+    <div id="interactive-map">
 
+    </div>
+</div>
+
+
+<div class="col-xs-6">
+    <div id="sidebar">
+
+    </div>
 </div>
 <script>
     $(document).ready(function(){
-       $('#interactive-map').interactive_map_builder();
+       $('#interactive-map').interactive_map_builder(
+           {
+               key_container: $('#sidebar')
+           }
+
+       );
     });
 </script>
 

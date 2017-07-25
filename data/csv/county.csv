@@ -24,13 +24,13 @@ id,path_id,english,welsh,top,left
 23,4284-1,Sir Gaerfyrddin,Sir Gaerfyrddin,55,55
 24,4306,Swansea,Abertawe,85,50
 25,4322,Castell-nedd Port Talbot,Castell-nedd,50,50
-26,4532,Pen-y-bont ar Ogwr,Pen-y-bont,70,50
-27,4518,Glamorgan,Bro Morgannwg,85,50
-28,4326,Rhondda Cynon Taf,Rhondda Cynon Taf,70,50
-29,4328,Merthyr Tydfil,Merthyr Tudful,40,40
-30,4318,Caerphilly,Caerffili,90,90
-31,4324,Blaenau Gwent,Blaenau Gwent,20,100
-32,4320,Tor-faen,Torfaen,80,90
+26,4532,Pen-y-bont ar Ogwr,Pen-y-bont,90,50
+27,4518,Glamorgan,Bro Morgannwg,95,50
+28,4326,Rhondda Cynon Taf,Rhondda Cynon Taf,70,40
+29,4328,Merthyr Tydfil,Merthyr Tudful,60,40
+30,4318,Caerphilly,Caerffili,80,50
+31,4324,Blaenau Gwent,Blaenau Gwent,50,50
+32,4320,Tor-faen,Torfaen,80,50
 33,26,Sir Fynwy,Sir Fynwy,60,60
-34,4530,Newport,Casnewydd,90,90
-35,4520,Cardiff,Caerdydd,100,100
+34,4530,Newport,Casnewydd,90,50
+35,4520,Cardiff,Caerdydd,100,60
