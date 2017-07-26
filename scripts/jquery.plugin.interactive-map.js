@@ -209,16 +209,24 @@
 
         var slider = function () {
 
-
-            return $('<div>').addClass('panel rounded').append(
+            return $('<div>').addClass('map-navigation').append(
                 $('<div>').addClass('slider-wrapper').append(
                     $('<input>').attr({
                         id: 'slider-' + id,
                         type: 'range',
                         min: 1951,
                         max: 2011,
-                        step: 10
-                    }).addClass('slider')
+                        step: 10,
+                    }).addClass('inner-slider slider'),
+                    $('<ul>').addClass('inner-slider year-list').append(
+                        $('<li>').text('1951'),
+                        $('<li>').text('1961'),
+                        $('<li>').text('1971'),
+                        $('<li>').text('1981'),
+                        $('<li>').text('1991'),
+                        $('<li>').text('2001'),
+                        $('<li>').text('2011')
+                    )
                 )
             )
         };
